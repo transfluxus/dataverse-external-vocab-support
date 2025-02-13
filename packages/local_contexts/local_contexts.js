@@ -111,10 +111,14 @@ async function cvoc_lc_editProject() {
         ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
           url: (params) => {
             // check if the user posted a uuid (lc project id) and
-            const uuid_regex = new RegExp("([a-f 0-9]{8})-([a-f 0-9]{4})-([a-f 0-9]{4})-([a-f 0-9]{4})-([a-f 0-9]{12})")
+            const uuid_regex_str = "([a-f 0-9]{8})-([a-f 0-9]{4})-([a-f 0-9]{4})-([a-f 0-9]{4})-([a-f 0-9]{12})"
+            const uuid_regex = new RegExp(uuid_regex_str)
+            const project_url_regex = new RegExp(baseUrl + uuid_regex_str)
             if (uuid_regex.test(params.term)) {
               //await get_or_fetch(params.term)
               return `${serviceUrl}api/v1/projects/${params.term}`
+            } else  if(project_url_regex.text(params.term)){ 
+                return params.term
             } else {
               return `${serviceUrl}api/v1/projects/?search=${params.term}`
             }
